@@ -1,20 +1,52 @@
 <?php
+use kartik\mpdf\Pdf;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'es-ES',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    // ...
+    'components' => [
+        // setup Krajee Pdf component
+
+    ],
+    'modules' => [
+          'dynagrid'=> [
+            'class'=>'\kartik\dynagrid\Module',
+            // other module settings
+        ],
+        'pdf' => [
+            'class' => Pdf::classname(),
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            // refer settings section for all configuration options
+        ],
+     'dynagridCustom' =>  [
+          'class' => '\kartik\dynagrid\Module',
+          // your other dynagrid module settings
+      ],
+      'gridview' =>  [
+           'class' => '\kartik\grid\Module',
+           // enter optional module parameters below - only if you need to
+           // use your own export download action or custom translation
+           // message source
+           // 'downloadAction' => 'gridview/export/download',
+           // 'i18n' => []
+       ]
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '6s9BnBgYb4rW7VTpEs1kaHWYHuhb8PKq',
+            'cookieValidationKey' => 'SMxO6sB_6PaBJj-eDtOTMnnJOUz5IrO7',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -43,27 +75,28 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
+    'urlManager' => [
+        'class' => 'yii\web\UrlManager',
+        // Hide index.php
+        'showScriptName' => false,
+        // Use pretty URLs
+        'enablePrettyUrl' => true,
+        'rules' => [
         ],
-        */
     ],
+
+],
     'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
-    // configuration adjustments for 'dev' environment
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+	// 	configuration adjustments for 'dev' environment
+			    $config['bootstrap'][] = 'debug';
+	$config['modules']['debug'] = [
+			        'class' => 'yii\debug\Module',
+			        // 	uncomment the following to add your IP if you are not connecting from localhost.
+			        //'	allowedIPs' => ['127.0.0.1', '::1'],
     ];
-
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
@@ -71,5 +104,4 @@ if (YII_ENV_DEV) {
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
-
 return $config;
