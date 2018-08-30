@@ -11,6 +11,7 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\models\Caja */
 /* @var $form yii\widgets\ActiveForm */
+$this->title = 'Tortillería Los Cuates';
 ?>
 
 <div class="info-form">

@@ -4,6 +4,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Reservacion;
 use app\models\Caja;
+use app\models\Banco;
+use app\models\Boveda;
 use app\models\EstadoCaja;
 use app\models\CajaSearch;
 use app\models\Privilegio;
@@ -93,10 +95,12 @@ class CajaController extends Controller
              if($model->tipo_movimiento == 1){
                $model->efectivo=-($model->efectivo);
                $registroSistema->descripcion = Yii::$app->user->identity->nombre ." retiró $".-($model->efectivo). ' de la caja';
+               $registroSistema->id_sucursal = 1;
              }
              else{
                $model->efectivo= $model->efectivo;
                $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ingresó $".$model->efectivo. ' a la caja';
+               $registroSistema->id_sucursal = 1;
              }
 
                if($model->save() && $registroSistema->save())
@@ -145,6 +149,7 @@ class CajaController extends Controller
             $sql = EstadoCaja::findOne(['id' => 1]);
             $sql->estado_caja = 1;
             $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una apertura de caja con $".$model->efectivo. ' de efectivo';
+            $registroSistema->id_sucursal = 1;
 
             if($model->save() && $sql->save() && $registroSistema->save())
             {
@@ -182,24 +187,42 @@ class CajaController extends Controller
         $id_current_user = Yii::$app->user->identity->id;
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
         $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+        $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
 
         if($privilegio[0]['cierre_caja'] == 1){
           $model = new Caja();
           $estado_caja = new EstadoCaja();
           $registroSistema= new RegistroSistema();
+          $banco = new Banco();
+          $boveda = new Boveda();
 
           if ($model->load(Yii::$app->request->post()))
             {
               $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado un cierre de caja de $".$model->efectivo. ' de efectivo';
+              $registroSistema->id_sucursal = 1;
+
               $sql = EstadoCaja::findOne(['id' => 1]);
               $sql->estado_caja = 0;
+
               $model->descripcion="Cierre de caja";
               $model->tipo_movimiento=1;
               $model->efectivo=-($model->efectivo);
               $model->create_user=Yii::$app->user->identity->id;
               $model->create_time=date('Y-m-d H:i:s');
 
-              if($model->save() && $sql->save() && $registroSistema->save())
+              $banco->id_sucursal = 1;
+              $banco->id_cuenta = 1;
+              $banco->tarjeta =-($totalesRetirado[0]['tarjeta']);
+              $banco->deposito =-($totalesRetirado[0]['deposito']);
+              $banco->tipo_movimiento = $totalesRetirado[0]['tipo_movimiento'];
+              $banco->descripcion = "Cierre de caja con el folio ". $totalesRetirado[0]['id'];
+
+              $boveda->descripcion = "Cierre de caja con el folio ". $totalesRetirado[0]['id'];
+              $boveda->tipo_movimiento = $totalesRetirado[0]['tipo_movimiento'];
+              $boveda->create_user = Yii::$app->user->identity->id;
+              $boveda->efectivo = -($totalesRetirado[0]['efectivo']);
+
+              if($model->save() && $sql->save() && $registroSistema->save() && $boveda->save() && $banco->save())
               {
                   return $this->render('info');
               }
@@ -220,14 +243,12 @@ class CajaController extends Controller
 
       $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
       $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
-      $habitacionesRealizadas = Yii::$app->db->createCommand('SELECT COUNT(*) FROM reservacion WHERE create_time BETWEEN (SELECT MAX(create_time) FROM caja WHERE descripcion=\'Apertura de caja\') AND (SELECT MAX(create_time) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
       $searchModel = new CajaSearch();
       $dataProvider = $searchModel->buscarMovimientosCierre(Yii::$app->request->queryParams);
       $content = $this->renderPartial('corteCaja',[
           'dataProvider' => $dataProvider,
           'totalesRetirados'=>$totalesRetirado,
           'totalCaja'=>$totalCaja,
-          'numHabitaciones'=>$habitacionesRealizadas,
       ]);
 
       $pdf = new Pdf([

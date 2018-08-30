@@ -6,7 +6,6 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Boveda */
 
-$this->title = 'Create Boveda';
 $this->params['breadcrumbs'][] = ['label' => 'Bovedas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

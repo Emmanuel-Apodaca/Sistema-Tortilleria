@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Banco;
+use app\models\RegistroSistema;
 
 /**
- * BancoSearch represents the model behind the search form of `app\models\Banco`.
+ * RegistroSistemaSearch represents the model behind the search form of `app\models\RegistroSistema`.
  */
-class BancoSearch extends Banco
+class RegistroSistemaSearch extends RegistroSistema
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,7 @@ class BancoSearch extends Banco
     public function rules()
     {
         return [
-            [['id', 'id_sucursal', 'id_cuenta', 'tipo_movimiento', 'create_user'], 'integer'],
-            [['tarjeta', 'deposito',], 'number'],
+            [['id', 'id_sucursal'], 'integer'],
             [['descripcion', 'create_time'], 'safe'],
         ];
     }
@@ -42,7 +41,7 @@ class BancoSearch extends Banco
      */
     public function search($params)
     {
-        $query = Banco::find();
+        $query = RegistroSistema::find();
 
         // add conditions that should always apply here
 
@@ -62,11 +61,6 @@ class BancoSearch extends Banco
         $query->andFilterWhere([
             'id' => $this->id,
             'id_sucursal' => $this->id_sucursal,
-            'id_cuenta' => $this->id_cuenta,
-            'tarjeta' => $this->tarjeta,
-            'deposito' => $this->deposito,
-            'tipo_movimiento' => $this->tipo_movimiento,
-            'create_user' => $this->create_user,
             'create_time' => $this->create_time,
         ]);
 

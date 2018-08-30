@@ -10,10 +10,8 @@ use Yii;
  * @property int $id
  * @property int $id_sucursal
  * @property int $id_cuenta
- * @property string $total
  * @property string $descripcion
  * @property int $tipo_movimiento
- * @property int $tipo_pago
  * @property int $create_user
  * @property string $create_time
  */
@@ -33,9 +31,9 @@ class Banco extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_sucursal', 'id_cuenta', 'total', 'descripcion'], 'required'],
-            [['id_sucursal', 'id_cuenta', 'tipo_movimiento', 'tipo_pago', 'create_user'], 'integer'],
-            [['total'], 'number'],
+            [['id_sucursal', 'id_cuenta', 'tarjeta', 'deposito', 'descripcion'], 'required'],
+            [['id_sucursal', 'id_cuenta', 'tipo_movimiento', 'create_user'], 'integer'],
+            [['tarjeta', 'deposito'], 'number'],
             [['create_time'], 'safe'],
             [['descripcion'], 'string', 'max' => 255],
         ];
@@ -50,12 +48,52 @@ class Banco extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_sucursal' => 'Id Sucursal',
             'id_cuenta' => 'Id Cuenta',
-            'total' => 'Total',
-            'descripcion' => 'Descripcion',
+            'tarjeta' => 'Tarjeta',
+            'deposito' => 'Depósito',
+            'descripcion' => 'Descripción',
             'tipo_movimiento' => 'Tipo Movimiento',
-            'tipo_pago' => 'Tipo Pago',
             'create_user' => 'Create User',
             'create_time' => 'Create Time',
         ];
     }
+
+    public function obtenerTipoMovimiento($key)
+      {
+          switch ($key) {
+              case 0:
+                  return 'Entrada';
+                  break;
+              case 1:
+                  return 'Salida';
+                  break;
+              default:
+                  return 'Sin información';
+                  break;
+          }
+  	}
+
+    public function obtenerTipoPago($key)
+      {
+          switch ($key) {
+            case 0:
+                return 'Efectivo';
+                break;
+            case 1:
+                return 'Tarjeta';
+                break;
+            case 2:
+                return 'Transferencia';
+                break;
+            case 3:
+                return 'Depósito';
+                break;
+            case 4:
+                return 'Cheque';
+                break;
+              default:
+                  return 'Sin información';
+                  break;
+          }
+  	}
+
 }

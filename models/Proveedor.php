@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property int $sucursal_id
- * @property int $cuenta_id
  * @property string $nombre
  * @property string $razon_social
  * @property string $rfc
@@ -52,7 +51,7 @@ class Proveedor extends \yii\db\ActiveRecord
     {
         return [
             [['sucursal_id'], 'required'],
-            [['sucursal_id', 'cuenta_id', 'tipo', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['sucursal_id', 'tipo', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['limite_credito'], 'number'],
             [['create_time', 'update_time', 'delete_time'], 'safe'],
             [['nombre', 'razon_social', 'rfc', 'calle', 'colonia', 'ciudad', 'estado', 'telefono1', 'telefono2', 'email', 'lada1', 'lada2'], 'string', 'max' => 45],
@@ -69,29 +68,28 @@ class Proveedor extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'sucursal_id' => 'Sucursal ID',
-            'cuenta_id' => 'Cuenta ID',
             'nombre' => 'Nombre',
-            'razon_social' => 'Razon Social',
-            'rfc' => 'Rfc',
+            'razon_social' => 'Razón Social',
+            'rfc' => 'RFC',
             'calle' => 'Calle',
-            'num_ext' => 'Num Ext',
-            'num_int' => 'Num Int',
+            'num_ext' => 'Número Exterior',
+            'num_int' => 'Número Interior',
             'colonia' => 'Colonia',
             'ciudad' => 'Ciudad',
             'estado' => 'Estado',
-            'cp' => 'Cp',
-            'telefono1' => 'Telefono1',
-            'telefono2' => 'Telefono2',
+            'cp' => 'Código Postal',
+            'telefono1' => 'Teléfono 1',
+            'telefono2' => 'Teléfono 2',
             'email' => 'Email',
-            'lada1' => 'Lada1',
-            'lada2' => 'Lada2',
-            'tipo' => 'Tipo',
-            'limite_credito' => 'Limite Credito',
+            'lada1' => 'Lada 1',
+            'lada2' => 'Lada 2',
+            'tipo' => 'Tipo de Proveedor',
+            'limite_credito' => 'Límite de Crédito',
             'eliminado' => 'Eliminado',
-            'create_user' => 'Create User',
-            'create_time' => 'Create Time',
-            'update_user' => 'Update User',
-            'update_time' => 'Update Time',
+            'create_user' => 'Registró',
+            'create_time' => 'Creado a las',
+            'update_user' => 'Actualizó',
+            'update_time' => 'Actualizado a las',
             'delete_user' => 'Delete User',
             'delete_time' => 'Delete Time',
         ];

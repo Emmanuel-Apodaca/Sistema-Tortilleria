@@ -3,9 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-
 use app\models\Caja;
-
 use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
