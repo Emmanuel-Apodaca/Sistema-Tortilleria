@@ -76,22 +76,22 @@ class RegistrarUsuarioController extends Controller
 	public function actionView($id)
 	{
 		$id_current_user = Yii::$app->user->identity->id;
-		//$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 		$model = $this->findModel($id);
-		//$registroSistema= new RegistroSistema();
-		//$idUsuario = Yii::$app->db->createCommand('SELECT id FROM privilegio WHERE id_usuario='.$id)->queryOne();
+		$registroSistema= new RegistroSistema();
+		$idUsuario = Yii::$app->db->createCommand('SELECT id FROM privilegio WHERE id_usuario='.$id)->queryOne();
 		if ($model->load(Yii::$app->request->post()))
 		{
-			/*$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del usuario ". $model->nombre;
+			$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del usuario ". $model->nombre;
 			$id_current_user = Yii::$app->user->identity->id;
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-			if($privilegio[0]['modificar_usuario'] == 1){*/
-				if ($model->save() /*&& $registroSistema->save()*/)
+			if($privilegio[0]['apertura_caja'] == 1){
+				if ($model->save() && $registroSistema->save())
 				{
 					Yii::$app->session->setFlash('kv-detail-success', 'La información se actualizó correctamente');
 					return $this->redirect(['view', 'id'=>$model->id,
-					//'idUsuario' => $idUsuario,
+					'idUsuario' => $idUsuario,
 					'model'=>$model,
 				]);
 				}
@@ -100,17 +100,17 @@ class RegistrarUsuarioController extends Controller
 					Yii::$app->session->setFlash('kv-detail-warning', 'Ha ocurrido un error al guardar la información');
 					return $this->redirect(['view', 'id'=>$model->id]);
 				}
-			/*}
+			}
 			else{
 				Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
 				return $this->redirect(['view', 'id'=>$model->id]);
-			}*/
+			}
 		}
 		else
 		{
 			return $this->render('view', [
 				'model'=>$model,
-				//'privilegio'=>$privilegio,
+				'privilegio'=>$privilegio,
 			]);
 		}
 	}

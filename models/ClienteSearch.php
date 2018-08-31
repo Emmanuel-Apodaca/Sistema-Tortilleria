@@ -90,6 +90,8 @@ class ClienteSearch extends Cliente
             ->andFilterWhere(['like', 'lada1', $this->lada1])
             ->andFilterWhere(['like', 'lada2', $this->lada2]);
 
+        $query->andFilterWhere(['eliminado' => 0 ]);
+
         return $dataProvider;
     }
 }

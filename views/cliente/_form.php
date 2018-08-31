@@ -12,10 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'sucursal_id')->textInput() ?>
-
-    <?= $form->field($model, 'cuenta_id')->textInput() ?>
-
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'razon_social')->textInput(['maxlength' => true]) ?>
@@ -50,22 +46,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'limite_credito')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'eliminado')->textInput() ?>
-
-    <?= $form->field($model, 'create_user')->textInput() ?>
-
-    <?= $form->field($model, 'create_time')->textInput() ?>
-
-    <?= $form->field($model, 'update_user')->textInput() ?>
-
-    <?= $form->field($model, 'update_time')->textInput() ?>
-
-    <?= $form->field($model, 'delete_user')->textInput() ?>
-
-    <?= $form->field($model, 'delete_time')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

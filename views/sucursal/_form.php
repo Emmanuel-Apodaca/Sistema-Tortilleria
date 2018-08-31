@@ -12,8 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id_domicilio')->textInput() ?>
-
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'calle')->textInput(['maxlength' => true]) ?>
@@ -44,20 +42,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'rfc')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'asignada')->textInput() ?>
-
-    <?= $form->field($model, 'eliminado')->textInput() ?>
-
-    <?= $form->field($model, 'create_user')->textInput() ?>
-
-    <?= $form->field($model, 'create_time')->textInput() ?>
-
-    <?= $form->field($model, 'update_user')->textInput() ?>
-
-    <?= $form->field($model, 'update_time')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

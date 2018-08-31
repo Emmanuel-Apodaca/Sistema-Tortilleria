@@ -1,47 +1,97 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
+use kartik\editable\Editable;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\User */
+/* @var $model app\models\RegistrarUsuario */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->title = 'Vista del usuario '. $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-view">
+<div class="registrar-usuario-view">
+
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'nombre',
-            'username',
-            'auth_hey',
-            'password_hash',
-            'password_reset_token',
-            'email:email',
-            'status',
-            'eliminado',
-            'create_user',
-            'create_time',
-            'update_user',
-            'update_time',
-        ],
-    ]) ?>
+    <div class="col-md-4">
+        <?php
+            echo DetailView::widget([
+                'model'=>$model,
+                'condensed'=>true,
+                'hover'=>true,
+                'mode'=>DetailView::MODE_VIEW,
+                'deleteOptions'=>[
+                  'params'=>['id' => $model->id],
+                  'url'=> ['delete', 'id' => $model->id],
+                  'data'=> [
+                    //'confirm'=>'¿Está seguro que desea eliminar esta habitación?',
+                    'method'=>'post',
+                  ],
+                ],
+                'panel'=>[
+                    'heading'=>'Registrar Usuario </br>' . $model->nombre,
+                    'type'=>DetailView::TYPE_INFO,
+                ],
+                'attributes'=>
+                [
+                    [
+                      'attribute'=>'id',
+                      'format'=>'raw',
+                      'label'=>'ID',
+                      'displayOnly'=>true,
+                    ],
+                    'nombre',
+                    'username',
+                    'email:email',
+                    [
+                        'attribute'=>'status',
+                        'label'=>'Estado',
+                        'format'=>'raw',
+                        'value'=>$model->status ? '<span class="label label-success">Activo </span>' : '<span class="label label-danger">Inactivo</span>',
+                        'type'=>DetailView::INPUT_SWITCH,
+                        'widgetOptions' =>
+                        [
+                            'pluginOptions' =>
+                            [
+                                'onText' => 'Activa',
+                                'offText' => 'Inactiva',
+                            ]
+                        ],
+                    ],
+                ]
+            ]);
+
+        ?>
+        </div>
+
+        <div class="privilegios">
+
+          <p>
+            <?php
+            if($privilegio[0]['apertura_caja'] == 1)
+            echo Html::a(Yii::t('app', 'Definir privilegios'), ['../web/privilegio/update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+          </p>
+
+          <?php
+            Modal::begin([
+              'header' => '<h4 style="color:#337AB7";>Definir privilegios</h4>',
+              'id' => 'modal',
+              'size' => 'modal-lg',
+            ]);
+
+            echo "<div id='modalContent'></div>";
+
+            Modal::end();
+
+          ?>
+
+        </div>
+
 
 </div>

@@ -3,9 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
-
 use app\models\User;
-
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
@@ -25,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
   <p>
     <?php
 //    if($privilegio[0]['apertura_caja'] == 1)
-      echo Html::button('Crear huésped', ['value'=>Url::to('../proveedor/create'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
+      echo Html::button('Crear proveedor', ['value'=>Url::to('../proveedor/create'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
   </p>
 
   <?php
